@@ -18,6 +18,10 @@ val Montserrat = FontFamily(
     Font(R.font.montserrat_bold, FontWeight.Bold)
 )
 
+val Poppins = FontFamily(
+    Font(R.font.poppins_regular),
+)
+
 // Set of Material typography styles to start with
 val Typography = Typography(
     displayLarge = TextStyle(
@@ -39,5 +43,17 @@ val Typography = Typography(
         fontFamily = Montserrat,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp
+    ),
+
+    bodyMedium = TextStyle(
+        fontFamily = Poppins,
+        fontWeight = FontWeight.Normal,
+        fontSize = 32.sp
     )
+
+//    bodySmall = TextStyle(
+//        fontFamily = Poppins,
+//        fontWeight = FontWeight.Bold,
+//        fontSize = 32.sp
+//    )
 )

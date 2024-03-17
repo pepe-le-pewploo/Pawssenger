@@ -1,5 +1,12 @@
 package com.example.pawssenger.ui.screens
 
+import android.content.Context
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.MutableTransitionState
@@ -24,6 +31,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -47,6 +55,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -59,8 +68,13 @@ import com.example.pawssenger.ui.components.OutlinedTextFiledGenerator
 import com.example.pawssenger.ui.components.PawssengerTopAppBar
 import com.example.pawssenger.ui.components.PresentDrawerContent
 import com.example.pawssenger.ui.theme.PawssengerTheme
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -74,6 +88,17 @@ fun RequestSubmissionPage(
     onLocateClick:()->Unit,
     selectedItemIndex:Int
 ) {
+    var uri by remember{
+        mutableStateOf<Uri?>(null)
+    }
+    val singlePhotoPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = {
+            uri = it
+        }
+    )
+
+    val context = LocalContext.current
     var petName by rememberSaveable {
         mutableStateOf("")
     }
@@ -229,10 +254,22 @@ fun RequestSubmissionPage(
                                 visibility = null,
                                 error = false
                             )
+                            Button(onClick = {
+                                singlePhotoPicker.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
+
+                            }){
+                                Text("Pick Single Image")
+                            }
+
 
                             EntryPageButtons(
+                                enabled=true,
                                 text = R.string.submit,
-                                onClick = { /*TODO*/ }
+                                onClick = { uri?.let{
+                                    Upload(uri=it, context=context,petName,contactInfo,dropOffLoacation,pickUpLoacation)
+                                }}
                             )
                         }
                     }
@@ -241,7 +278,63 @@ fun RequestSubmissionPage(
         }
     }
 }
+fun Upload(uri: Uri, context: Context,petName: String,contactInfo:String, dropOffLoacation:String, pickUpLoacation:String){
+//    val description=houseDataUiState.value.description
+//    val rent=houseDataUiState.value.rent
+//    val address=houseDataUiState.value.address
+    val unique_image_name = UUID.randomUUID()
+    val newPet = hashMapOf(
+        "petName" to "$petName",
+        "pickUpLocation" to "$pickUpLoacation",
+        "dropOffLocation" to "$dropOffLoacation",
+        "contactInfo" to "$contactInfo",
+        "image" to "https://firebasestorage.googleapis.com/v0/b/pawssenger-d45ea.appspot.com/o/pet%2F${unique_image_name}.jpg?alt=media&token=646d0472-44c2-4916-a5e7-84217d71ad56"
+    )
+    val storage= Firebase.storage
+    val db = Firebase.firestore
 
+    db.collection("petInfo")
+        .add(newPet)
+        .addOnSuccessListener { documentReference ->
+            Log.d("newPetAdded", "DocumentSnapshot added with ID: ${documentReference.id}")
+        }
+        .addOnFailureListener { e ->
+            Log.w("failedHouseAdded", "Error adding document", e)
+        }
+
+
+    var storageRef = storage.reference
+    var spaceRef: StorageReference
+
+
+    spaceRef = storageRef.child("pet/${unique_image_name}.jpg")
+
+    val byteArray: ByteArray? = context.contentResolver
+        .openInputStream(uri)
+        ?.use { it.readBytes() }
+
+    byteArray?.let{
+
+        var uploadTask = spaceRef.putBytes(byteArray)
+        uploadTask.addOnFailureListener {
+            Toast.makeText(
+                context,
+                "upload failed",
+                Toast.LENGTH_SHORT
+            ).show()
+            // Handle unsuccessful uploads
+        }.addOnSuccessListener { taskSnapshot ->
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            // ...
+            Toast.makeText(
+                context,
+                "upload successed",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+}
 @Composable
 fun SubmitHeading() {
     Text(

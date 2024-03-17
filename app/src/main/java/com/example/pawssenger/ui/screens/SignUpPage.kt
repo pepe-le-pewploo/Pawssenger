@@ -40,12 +40,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pawssenger.EntryPageButtons
 import com.example.pawssenger.R
-import com.example.pawssenger.data.SignUpViewModel
-import com.example.pawssenger.data.SignupUIEvent
+import com.example.pawssenger.data.signup.SignUpViewModel
+import com.example.pawssenger.data.signup.SignupUIEvent
 import com.example.pawssenger.ui.components.LogoAndName
 import com.example.pawssenger.ui.components.OutlinedTextFiledGenerator
 import com.example.pawssenger.ui.theme.PawssengerTheme

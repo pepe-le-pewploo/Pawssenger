@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExpandLess
@@ -64,11 +65,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.pawssenger.R
 import com.example.pawssenger.data.BrowsePetData
 import com.example.pawssenger.data.NavigationDrawerContent
 import com.example.pawssenger.data.NavigationDrawerData
 import com.example.pawssenger.data.PetData
+import com.example.pawssenger.data.petData.petUiState
 import com.example.pawssenger.ui.components.PawssengerTopAppBar
 import com.example.pawssenger.ui.components.PresentDrawerContent
 import com.example.pawssenger.ui.theme.PawssengerTheme
@@ -78,6 +82,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RequestBrowser(
+    petData:com.example.pawssenger.data.petData.PetData= viewModel(),
     pets: List<PetData>,
     onClickFloatingActionButton:() -> Unit,
     drawerContent:List<NavigationDrawerData>,
@@ -89,6 +94,7 @@ fun RequestBrowser(
     onLogOutClick:() -> Unit,
     selectedItemIndex:Int
 ) {
+    var Pets=petData.stateList.value
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = true,
@@ -134,7 +140,7 @@ fun RequestBrowser(
             }
         ) { it ->
             LazyColumn(contentPadding = it) {
-                items(pets) {
+                items(Pets) {
                     PetItem(
                         pet = it,
                         modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
@@ -172,9 +178,10 @@ fun RequestBrowser(
 
 @Composable
 fun PetItem(
-    pet: PetData,
+    pet: petUiState,
     modifier: Modifier = Modifier
 ) {
+
     var expanded by remember { mutableStateOf(false) }
     var acceptState by rememberSaveable {
         mutableStateOf(false)
@@ -209,7 +216,7 @@ fun PetItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 PetImage(pet.image)
-                TransportInfo(pet.pickUpPoint, pet.Destination)
+                TransportInfo(pet.pickUpLocation, pet.dropOffLocation)
                 Spacer(modifier = modifier.weight(1f))
                 ExpandButton(
                     expanded = expanded,
@@ -225,7 +232,7 @@ fun PetItem(
                 ) {
                     ExtraInfo(
                         petName = pet.petName,
-                        ownerName = pet.petOwner,
+                        ownerName = "",
                         contactInfo = pet.contactInfo,
                         modifier = Modifier.padding(
                             start = dimensionResource(R.dimen.padding_medium),
@@ -263,24 +270,24 @@ fun PetItem(
 
 @Composable
 fun PetImage(
-    @DrawableRes petImage: Int,
+     petImage: String,
     modifier: Modifier = Modifier
 ) {
-    Image(
+    AsyncImage(
+        model = petImage,
+        contentDescription = null,
         modifier = modifier
-            .size(96.dp)
-            .padding(dimensionResource(R.dimen.padding_small))
-            .clip(MaterialTheme.shapes.small),
-        contentScale = ContentScale.Crop,
-        painter = painterResource(petImage),
-        contentDescription = null
+            .size(400.dp)
+            .padding(8.dp)
+            .clip(RoundedCornerShape(16.dp)),
+        contentScale = ContentScale.Fit
     )
 }
 
 @Composable
 fun TransportInfo(
-    @StringRes pickUpPoint: Int,
-    @StringRes destination: Int,
+   pickUpPoint: String,
+   destination:String,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -290,7 +297,7 @@ fun TransportInfo(
 }
 
 @Composable
-fun LocationInfo(location: Int, description: Int) {
+fun LocationInfo(location: String, description: Int) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -303,7 +310,7 @@ fun LocationInfo(location: Int, description: Int) {
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = stringResource(id = location),
+            text = location,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small))
         )
@@ -331,9 +338,9 @@ private fun ExpandButton(
 
 @Composable
 fun ExtraInfo(
-    @StringRes petName: Int,
-    @StringRes ownerName: Int,
-    @StringRes contactInfo: Int,
+     petName: String,
+    ownerName: String,
+    contactInfo: String,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -344,7 +351,7 @@ fun ExtraInfo(
 }
 
 @Composable
-fun ExtraInfoDetails(heading: Int, details: Int) {
+fun ExtraInfoDetails(heading: Int, details: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -357,7 +364,7 @@ fun ExtraInfoDetails(heading: Int, details: Int) {
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = stringResource(id = details),
+            text = details,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(top = dimensionResource(R.dimen.padding_small))
         )

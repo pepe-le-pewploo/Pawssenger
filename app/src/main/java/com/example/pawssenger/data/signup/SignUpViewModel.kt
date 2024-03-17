@@ -1,8 +1,7 @@
-package com.example.pawssenger.data
+package com.example.pawssenger.data.signup
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.pawssenger.ui.navigation.PawssengerScreen

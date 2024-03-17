@@ -1,4 +1,4 @@
-package com.example.pawssenger.data
+package com.example.pawssenger.data.login
 
 data class LoginUIState (
     var email: String="",

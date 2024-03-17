@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pawssenger.EntryPageButtons
 import com.example.pawssenger.R
-import com.example.pawssenger.data.LogInViewModel
-import com.example.pawssenger.data.LoginUIEvent
+import com.example.pawssenger.data.login.LogInViewModel
+import com.example.pawssenger.data.login.LoginUIEvent
 import com.example.pawssenger.ui.components.LogoAndName
 import com.example.pawssenger.ui.components.OutlinedTextFiledGenerator
 import com.example.pawssenger.ui.theme.PawssengerTheme

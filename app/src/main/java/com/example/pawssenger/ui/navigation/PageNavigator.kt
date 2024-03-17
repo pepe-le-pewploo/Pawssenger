@@ -1,6 +1,5 @@
 package com.example.pawssenger.ui.navigation
 
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,12 +20,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pawssenger.EntryPage
 import com.example.pawssenger.data.BrowsePetData
-import com.example.pawssenger.data.LogInViewModel
-import com.example.pawssenger.data.LoginUIEvent
+import com.example.pawssenger.data.login.LogInViewModel
+import com.example.pawssenger.data.login.LoginUIEvent
 import com.example.pawssenger.data.NavigationDrawerContent
 import com.example.pawssenger.data.NavigationDrawerData
-import com.example.pawssenger.data.SignUpViewModel
-import com.example.pawssenger.data.SignupUIEvent
+import com.example.pawssenger.data.signup.SignUpViewModel
+import com.example.pawssenger.data.signup.SignupUIEvent
 import com.example.pawssenger.ui.screens.LogInPage
 import com.example.pawssenger.ui.screens.RequestBrowser
 import com.example.pawssenger.ui.screens.RequestSubmissionPage

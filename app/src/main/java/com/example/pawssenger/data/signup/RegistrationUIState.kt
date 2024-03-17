@@ -1,4 +1,4 @@
-package com.example.pawssenger.data
+package com.example.pawssenger.data.signup
 
 data class RegistrationUIState(
     var firstName: String="",
@@ -6,6 +6,8 @@ data class RegistrationUIState(
     var email:String="",
     var password:String="",
     val userName:String="",
+    var asUser: Boolean = true,
+    val asTransporter: Boolean = false,
 
     var firstNameError :Boolean = false,
     var lastNameError : Boolean = false,
