@@ -87,6 +87,7 @@ fun RequestSubmissionPage(
     onProfileClick:() ->Unit,
     onDashboardClick:() ->Unit,
     onLocateClick:()->Unit,
+    onFilterClick:()->Unit,
     selectedItemIndex:Int
 ) {
     var uri by remember{
@@ -139,7 +140,8 @@ fun RequestSubmissionPage(
                             0 -> onProfileClick
                             1 -> onDashboardClick
                             2 -> onLocateClick
-                            3 -> onLogOutClick
+                            3 -> onFilterClick
+                            4 -> onLogOutClick
                             else -> { {} }
                         }
                         PresentDrawerContent(
@@ -292,7 +294,7 @@ fun RequestSubmissionPage(
                                 enabled=true,
                                 text = R.string.submit,
                                 onClick = { uri?.let{
-                                    Upload(uri=it, context=context,petName,contactInfo,dropOffLoacation,pickUpLoacation)
+                                    Upload(uri=it, context=context,petName,contactInfo,dropOffLoacation,pickUpLoacation, ownerName, payment)
                                 }}
                             )
                         }
@@ -302,7 +304,9 @@ fun RequestSubmissionPage(
         }
     }
 }
-fun Upload(uri: Uri, context: Context,petName: String,contactInfo:String, dropOffLoacation:String, pickUpLoacation:String){
+fun Upload(uri: Uri, context: Context,petName: String,contactInfo:String, dropOffLoacation:String, pickUpLoacation:String,
+           ownerName:String, payment:String
+){
 //    val description=houseDataUiState.value.description
 //    val rent=houseDataUiState.value.rent
 //    val address=houseDataUiState.value.address
@@ -312,7 +316,9 @@ fun Upload(uri: Uri, context: Context,petName: String,contactInfo:String, dropOf
         "pickUpLocation" to "$pickUpLoacation",
         "dropOffLocation" to "$dropOffLoacation",
         "contactInfo" to "$contactInfo",
-        "image" to "https://firebasestorage.googleapis.com/v0/b/pawssenger-d45ea.appspot.com/o/pet%2F${unique_image_name}.jpg?alt=media&token=646d0472-44c2-4916-a5e7-84217d71ad56"
+        "image" to "https://firebasestorage.googleapis.com/v0/b/pawssenger-d45ea.appspot.com/o/pet%2F${unique_image_name}.jpg?alt=media&token=646d0472-44c2-4916-a5e7-84217d71ad56",
+        "ownerName" to "$ownerName",
+        "payment" to "$payment"
     )
     val storage= Firebase.storage
     val db = Firebase.firestore

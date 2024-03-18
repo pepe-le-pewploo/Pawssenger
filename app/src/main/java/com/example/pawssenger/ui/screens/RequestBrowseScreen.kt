@@ -93,6 +93,7 @@ fun RequestBrowser(
     onDashboardClick:() -> Unit,
     onLocateClick:() -> Unit,
     onLogOutClick:() -> Unit,
+    onFilterClick:() -> Unit,
     selectedItemIndex:Int,
     signUpViewModel: SignUpViewModel = viewModel()
 ) {
@@ -110,7 +111,8 @@ fun RequestBrowser(
                             0 -> onProfileClick
                             1 -> onDashboardClick
                             2 -> onLocateClick
-                            3 -> onLogOutClick
+                            3 -> onFilterClick
+                            4 -> onLogOutClick
                             else -> { {} }
                         }
                         PresentDrawerContent(
@@ -214,8 +216,9 @@ fun PetItem(
                 ) {
                     ExtraInfo(
                         petName = pet.petName,
-                        ownerName = "",
+                        ownerName = pet.ownerName,
                         contactInfo = pet.contactInfo,
+                        payment = pet.payment,
                         modifier = Modifier.padding(
                             start = dimensionResource(R.dimen.padding_medium),
                             top = dimensionResource(R.dimen.padding_small),
@@ -343,12 +346,14 @@ fun ExtraInfo(
      petName: String,
     ownerName: String,
     contactInfo: String,
+     payment:String,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         ExtraInfoDetails(heading = R.string.name, details = petName)
         ExtraInfoDetails(heading = R.string.owner, details = ownerName)
         ExtraInfoDetails(heading = R.string.contact, details = contactInfo)
+        ExtraInfoDetails(heading = R.string.payment, details = payment)
     }
 }
 

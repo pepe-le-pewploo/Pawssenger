@@ -118,8 +118,11 @@ fun PawssengerApp(
                 onDashboardClick = {selectedItemIndex = 1},
                 onLocateClick = {selectedItemIndex = 2},
                 onLogOutClick = {
-                    selectedItemIndex = 3
+                    selectedItemIndex = 4
                     navController.popBackStack(route = PawssengerScreen.Entry.name, inclusive = false)
+                },
+                onFilterClick = {
+                    selectedItemIndex = 3
                 },
                 selectedItemIndex = selectedItemIndex,
                 signUpViewModel = signUpViewModel
@@ -142,9 +145,12 @@ fun PawssengerApp(
                     selectedItemIndex = 2
                 },
                 onLogOutClick = {
-                    selectedItemIndex = 3
+                    selectedItemIndex = 4
                     logInViewModel.onEvent(LoginUIEvent.LogoutButtonClicked)
                     navController.popBackStack(route = PawssengerScreen.Entry.name, inclusive = false)
+                },
+                onFilterClick = {
+                    selectedItemIndex = 3
                 },
                 selectedItemIndex = selectedItemIndex
             )
@@ -166,9 +172,12 @@ fun PawssengerApp(
                     selectedItemIndex = 2
                 },
                 onLogOutClick = {
-                    selectedItemIndex = 3
+                    selectedItemIndex = 4
                     logInViewModel.onEvent(LoginUIEvent.LogoutButtonClicked)
                     navController.popBackStack(route = PawssengerScreen.Entry.name, inclusive = false)
+                },
+                onFilterClick = {
+                    selectedItemIndex = 3
                 },
                 selectedItemIndex = selectedItemIndex
             )

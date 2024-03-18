@@ -3,10 +3,13 @@ package com.example.pawssenger.data
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Filter
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.ExitToApp
+import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
@@ -41,6 +44,11 @@ class NavigationDrawerContent(){
                 name = R.string.locate,
                 selectedIcon = Icons.Filled.LocationOn,
                 unselectedIcon = Icons.Outlined.LocationOn
+            ),
+            NavigationDrawerData(
+                name = R.string.filter,
+                selectedIcon = Icons.Filled.FilterList,
+                unselectedIcon = Icons.Outlined.FilterList
             ),
             NavigationDrawerData(
                 name = R.string.logout,

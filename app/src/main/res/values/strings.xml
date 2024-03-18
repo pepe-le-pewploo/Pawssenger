@@ -73,6 +73,8 @@
     <string name="owner_name">Owner Name</string>
     <string name="payment">Payment</string>
     <string name="user_role">Register as a Transporter</string>
+    <string name="filter">Filter</string>
+    <string name="contact_no">Contact Number</string>
 
 
 </resources>

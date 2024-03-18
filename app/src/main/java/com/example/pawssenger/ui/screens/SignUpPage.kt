@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Card
@@ -150,11 +151,11 @@ fun SignUpPage(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp),
-                            labelText = R.string.username2,
-                            leadingImageVector = Icons.Outlined.Person,
+                            labelText = R.string.contact_no,
+                            leadingImageVector = Icons.Outlined.Phone,
                             trailingImageVector = null,
                             onValueChange = {
-                                signUpViewModel.onEvent(SignupUIEvent.UsernameChanged(it))
+                                signUpViewModel.onEvent(SignupUIEvent.ContactNoChanged(it))
                             },
                             iconButtonOnClick = {},
                             visibility = null,

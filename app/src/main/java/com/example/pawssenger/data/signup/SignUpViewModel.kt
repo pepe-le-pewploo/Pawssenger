@@ -1,11 +1,15 @@
 package com.example.pawssenger.data.signup
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.example.pawssenger.data.login.LoginUIState
 import com.example.pawssenger.ui.navigation.PawssengerScreen
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.firestore
 import com.nativemobilebits.loginflow.data.rules.Validator
 
 class SignUpViewModel: ViewModel() {
@@ -15,6 +19,7 @@ class SignUpViewModel: ViewModel() {
     var allValidationsPassed = mutableStateOf(false)
 
     var registrationUIState = mutableStateOf(RegistrationUIState())
+    var loginUIState = mutableStateOf(LoginUIState())
     var signUpInProgress = mutableStateOf(false)
 
     fun onEvent(event: SignupUIEvent) {
@@ -36,6 +41,9 @@ class SignUpViewModel: ViewModel() {
                 registrationUIState.value=registrationUIState.value.copy(
                     email = event.email
                 )
+                loginUIState.value = loginUIState.value.copy(
+                    email = event.email
+                )
                 printState()
             }
             is SignupUIEvent.PasswordChanged->{
@@ -45,13 +53,14 @@ class SignUpViewModel: ViewModel() {
                 printState()
             }
             is SignupUIEvent.SignUpButtonClicked->{
+                CreateProfile(registrationUIState = registrationUIState)
                 signUp(navController = event.navController)
                 printState()
             }
 
-            is SignupUIEvent.UsernameChanged->{
+            is SignupUIEvent.ContactNoChanged->{
                 registrationUIState.value = registrationUIState.value.copy(
-                    userName = event.userName
+                    contactNo = event.contactNo
                 )
             }
             is SignupUIEvent.RadioButtonClicked->{
@@ -61,6 +70,25 @@ class SignUpViewModel: ViewModel() {
                 printState()
             }
         }
+    }
+
+    private fun CreateProfile(registrationUIState: MutableState<RegistrationUIState>){
+        val db = Firebase.firestore
+        val newProfile = hashMapOf(
+            "firstName" to registrationUIState.value.firstName,
+            "lastName" to registrationUIState.value.lastName,
+            "email" to registrationUIState.value.email,
+            "contactNo" to registrationUIState.value.contactNo,
+            "role" to if(registrationUIState.value.asTransporter) "Transporter" else "Pet Owner"
+        )
+        db.collection("profile")
+            .add(newProfile)
+            .addOnSuccessListener { documentReference ->
+                //Log.d("newHouseAdded", "DocumentSnapshot added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+               // Log.w("failedHouseAdded", "Error adding document", e)
+            }
     }
 
     private fun signUp(navController:NavController) {
@@ -107,7 +135,7 @@ class SignUpViewModel: ViewModel() {
         )
 
         val userNameResult = Validator.validateUserName(
-            uName = registrationUIState.value.userName
+            uName = registrationUIState.value.contactNo
         )
 
 

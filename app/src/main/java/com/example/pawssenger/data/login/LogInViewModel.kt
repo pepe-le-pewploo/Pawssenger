@@ -87,6 +87,7 @@ class LogInViewModel : ViewModel() {
                 Log.d(TAG, "&{it.isSuccessful}")
                 if (it.isSuccessful) {
                     loginInProgress.value = false
+                    //navController.popBackStack(PawssengerScreen.Entry.name, inclusive = true)
                     navController.navigate(PawssengerScreen.RequestBrowse.name)
                 }
             }

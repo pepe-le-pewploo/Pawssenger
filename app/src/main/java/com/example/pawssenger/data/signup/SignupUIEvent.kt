@@ -7,7 +7,7 @@ sealed class SignupUIEvent {
     data class LastNameChanged(val lastName:String): SignupUIEvent()
     data class EmailChanged(val email:String): SignupUIEvent()
 
-    data class UsernameChanged(val userName:String): SignupUIEvent()
+    data class ContactNoChanged(val contactNo:String): SignupUIEvent()
     data class PasswordChanged(val password:String): SignupUIEvent()
     data class RadioButtonClicked(val transporter:Boolean): SignupUIEvent()
     data class SignUpButtonClicked(val navController: NavController) : SignupUIEvent()

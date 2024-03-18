@@ -37,6 +37,7 @@ import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,9 +47,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pawssenger.R
 import com.example.pawssenger.data.NavigationDrawerContent
 import com.example.pawssenger.data.NavigationDrawerData
+import com.example.pawssenger.data.ProfileUiState
+import com.example.pawssenger.data.ProfileViewModel
+import com.example.pawssenger.data.login.LogInViewModel
 import com.example.pawssenger.ui.components.PawssengerTopAppBar
 import com.example.pawssenger.ui.components.PresentDrawerContent
 import com.example.pawssenger.ui.theme.PawssengerTheme
@@ -64,8 +69,19 @@ fun ProfilePage(
     onProfileClick:() ->Unit,
     onDashboardClick:() ->Unit,
     onLocateClick:()->Unit,
-    selectedItemIndex:Int
+    onFilterClick:()->Unit,
+    selectedItemIndex:Int,
+    loginViewModel:LogInViewModel = viewModel(),
+    profileViewModel: ProfileViewModel =viewModel()
 ) {
+    val email=loginViewModel.loginUIState.value.email
+    val profiles=profileViewModel.stateList
+    var profile= mutableStateOf(ProfileUiState())
+    for(p in profiles.value){
+        if(p.email==email){
+            profile.value=p
+        }
+    }
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = true,
@@ -79,7 +95,8 @@ fun ProfilePage(
                             0 -> onProfileClick
                             1 -> onDashboardClick
                             2 -> onLocateClick
-                            3 -> onLogOutClick
+                            3 -> onFilterClick
+                            4 -> onLogOutClick
                             else -> { {} }
                         }
                         PresentDrawerContent(
@@ -120,7 +137,7 @@ fun ProfilePage(
                     Detail(
                         imageVector = Icons.Default.Person,
                         headText = "Name",
-                        descriptText = "Nazmul Hossen Rahul"
+                        descriptText = "${profile.value.firstName} ${profile.value.lastName}"
                     )
 
                     giveSpace()
@@ -128,7 +145,7 @@ fun ProfilePage(
                     Detail(
                         imageVector = Icons.Default.Email,
                         headText = "Email Id",
-                        descriptText = "nazmul@gmail.com"
+                        descriptText = profile.value.email
                     )
 
                     giveSpace()
@@ -136,14 +153,14 @@ fun ProfilePage(
                     Detail(
                         imageVector = Icons.Default.Phone,
                         headText = "Contact No.",
-                        descriptText = "012345678"
+                        descriptText = profile.value.contactNo
                     )
 
                     giveSpace()
 
                     Detail(imageVector = Icons.Default.Group,
                         headText = "User Role",
-                        descriptText = "Pet Owner"
+                        descriptText = profile.value.role
                     )
                 }
 
