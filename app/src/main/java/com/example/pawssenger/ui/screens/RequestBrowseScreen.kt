@@ -73,6 +73,7 @@ import com.example.pawssenger.data.NavigationDrawerContent
 import com.example.pawssenger.data.NavigationDrawerData
 import com.example.pawssenger.data.PetData
 import com.example.pawssenger.data.petData.petUiState
+import com.example.pawssenger.data.signup.SignUpViewModel
 import com.example.pawssenger.ui.components.PawssengerTopAppBar
 import com.example.pawssenger.ui.components.PresentDrawerContent
 import com.example.pawssenger.ui.theme.PawssengerTheme
@@ -92,7 +93,8 @@ fun RequestBrowser(
     onDashboardClick:() -> Unit,
     onLocateClick:() -> Unit,
     onLogOutClick:() -> Unit,
-    selectedItemIndex:Int
+    selectedItemIndex:Int,
+    signUpViewModel: SignUpViewModel = viewModel()
 ) {
     var Pets=petData.stateList.value
     ModalNavigationDrawer(
@@ -126,16 +128,18 @@ fun RequestBrowser(
     ) {
         Scaffold(
             topBar = {
-                PawssengerTopAppBar(drawerState = drawerState, scope = scope)
+                PawssengerTopAppBar(drawerState = drawerState, scope = scope, text = R.string.app_name)
             },
             floatingActionButton = {
-                FloatingActionButton(
-                    onClick = onClickFloatingActionButton,
-                    containerColor = MaterialTheme.colorScheme.background
-                ) {
-                    Icon(
-                        Icons.Outlined.Add, contentDescription = null
-                    )
+                if(!signUpViewModel.registrationUIState.value.asTransporter){
+                    FloatingActionButton(
+                        onClick = onClickFloatingActionButton,
+                        containerColor = MaterialTheme.colorScheme.background
+                    ) {
+                        Icon(
+                            Icons.Outlined.Add, contentDescription = null
+                        )
+                    }
                 }
             }
         ) { it ->
@@ -143,43 +147,21 @@ fun RequestBrowser(
                 items(Pets) {
                     PetItem(
                         pet = it,
-                        modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                        modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
+                        signUpViewModel = signUpViewModel
                     )
                 }
             }
         }
 
     }
-//    Scaffold(
-//        topBar = {
-//            PawssengerTopAppBar()
-//        },
-//        floatingActionButton = {
-//            FloatingActionButton(
-//                onClick = onClickFloatingActionButton,
-//                containerColor = MaterialTheme.colorScheme.background
-//            ) {
-//                Icon(
-//                    Icons.Outlined.Add, contentDescription = null
-//                )
-//            }
-//        }
-//    ) { it ->
-//        LazyColumn(contentPadding = it) {
-//            items(pets) {
-//                PetItem(
-//                    pet = it,
-//                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
-//                )
-//            }
-//        }
-//    }
 }
 
 @Composable
 fun PetItem(
     pet: petUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    signUpViewModel: SignUpViewModel = viewModel()
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -244,23 +226,43 @@ fun PetItem(
 
                     Spacer(modifier = Modifier.width(56.dp))
 
-                    Button(
-                        onClick = { acceptState = true },
-                        modifier = Modifier.width(128.dp),
-                        elevation = ButtonDefaults.buttonElevation(
-                            defaultElevation = 12.dp,
-                            pressedElevation = 12.dp,
-                            disabledElevation = 0.dp,
-                            hoveredElevation = 12.dp,
-                            focusedElevation = 12.dp
-                        )
-                    ) {
-                        if (acceptState) {
-                            Text(text = "Accepted")
-                        } else {
-                            Text(text = "Accept")
+                    if(signUpViewModel.registrationUIState.value.asTransporter){
+                        Button(
+                            onClick = { acceptState = true },
+                            modifier = Modifier.width(128.dp),
+                            elevation = ButtonDefaults.buttonElevation(
+                                defaultElevation = 12.dp,
+                                pressedElevation = 12.dp,
+                                disabledElevation = 0.dp,
+                                hoveredElevation = 12.dp,
+                                focusedElevation = 12.dp
+                            )
+                        ) {
+                            if (acceptState) {
+                                Text(text = "Accepted")
+                            } else {
+                                Text(text = "Accept")
+                            }
                         }
                     }
+
+//                    Button(
+//                        onClick = { acceptState = true },
+//                        modifier = Modifier.width(128.dp),
+//                        elevation = ButtonDefaults.buttonElevation(
+//                            defaultElevation = 12.dp,
+//                            pressedElevation = 12.dp,
+//                            disabledElevation = 0.dp,
+//                            hoveredElevation = 12.dp,
+//                            focusedElevation = 12.dp
+//                        )
+//                    ) {
+//                        if (acceptState) {
+//                            Text(text = "Accepted")
+//                        } else {
+//                            Text(text = "Accept")
+//                        }
+//                    }
                 }
             }
         }
@@ -277,10 +279,10 @@ fun PetImage(
         model = petImage,
         contentDescription = null,
         modifier = modifier
-            .size(400.dp)
-            .padding(8.dp)
-            .clip(RoundedCornerShape(16.dp)),
-        contentScale = ContentScale.Fit
+            .size(96.dp)
+            .padding(dimensionResource(R.dimen.padding_small))
+            .clip(MaterialTheme.shapes.small),
+        contentScale = ContentScale.Crop
     )
 }
 

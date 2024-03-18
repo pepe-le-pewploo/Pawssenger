@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.pawssenger.ui.navigation.PawssengerApp
 import com.example.pawssenger.ui.screens.SignUpPage
+import com.example.pawssenger.ui.screens.SomethingPage
 import com.example.pawssenger.ui.theme.PawssengerTheme
 
 class MainActivity : ComponentActivity() {
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
                     //EntryPage()
 //                    SignUpPage()
                     PawssengerApp()
+                   // SomethingPage()
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.example.pawssenger.ui.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Menu
@@ -25,7 +26,8 @@ import kotlinx.coroutines.launch
 fun PawssengerTopAppBar(
     modifier: Modifier = Modifier,
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    @StringRes text: Int
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -33,7 +35,7 @@ fun PawssengerTopAppBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.app_name),
+                    text = stringResource(id = text),
                     style = MaterialTheme.typography.displayLarge
                 )
             }

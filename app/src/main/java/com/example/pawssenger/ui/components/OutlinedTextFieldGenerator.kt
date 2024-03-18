@@ -62,10 +62,12 @@ fun OutlinedTextFiledGenerator(
         },
         leadingIcon = {
             if (leadingImageVector != null) {
-                Icon(
-                    imageVector = leadingImageVector,
-                    contentDescription = null
-                )
+                IconButton(onClick = iconButtonOnClick){
+                    Icon(
+                        imageVector = leadingImageVector,
+                        contentDescription = null
+                    )
+                }
             }
         },
 

@@ -9,5 +9,6 @@ sealed class SignupUIEvent {
 
     data class UsernameChanged(val userName:String): SignupUIEvent()
     data class PasswordChanged(val password:String): SignupUIEvent()
+    data class RadioButtonClicked(val transporter:Boolean): SignupUIEvent()
     data class SignUpButtonClicked(val navController: NavController) : SignupUIEvent()
 }

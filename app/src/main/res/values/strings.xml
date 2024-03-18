@@ -70,6 +70,9 @@
     <string name="dashboard">Dashboard</string>
     <string name="logout">Log Out</string>
     <string name="locate">Locate</string>
+    <string name="owner_name">Owner Name</string>
+    <string name="payment">Payment</string>
+    <string name="user_role">Register as a Transporter</string>
 
 
 </resources>

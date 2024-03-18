@@ -45,6 +45,7 @@ import com.example.pawssenger.EntryPageButtons
 import com.example.pawssenger.R
 import com.example.pawssenger.data.signup.SignUpViewModel
 import com.example.pawssenger.data.signup.SignupUIEvent
+import com.example.pawssenger.ui.components.LabeledRadioButton
 import com.example.pawssenger.ui.components.LogoAndName
 import com.example.pawssenger.ui.components.OutlinedTextFiledGenerator
 import com.example.pawssenger.ui.theme.PawssengerTheme
@@ -191,7 +192,14 @@ fun SignUpPage(
                             error = signUpViewModel.registrationUIState.value.passwordError
                         )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        LabeledRadioButton(
+                            text = R.string.user_role,
+                            onClick = {
+                                signUpViewModel.onEvent(SignupUIEvent.RadioButtonClicked(it))
+                            }
+                        )
+
+                        //Spacer(modifier = Modifier.height(4.dp))
 
                         EntryPageButtons(
                             text = R.string.sign_up, onClick = onClickSignUpButton,

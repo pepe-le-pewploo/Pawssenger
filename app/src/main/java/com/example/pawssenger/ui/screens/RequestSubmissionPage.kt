@@ -30,6 +30,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Money
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -117,6 +118,14 @@ fun RequestSubmissionPage(
         mutableStateOf("")
     }
 
+    var ownerName by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    var payment by rememberSaveable {
+        mutableStateOf("")
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = true,
@@ -148,7 +157,7 @@ fun RequestSubmissionPage(
     ){
         Scaffold(
             topBar = {
-                PawssengerTopAppBar(drawerState = drawerState, scope = scope)
+                PawssengerTopAppBar(drawerState = drawerState, scope = scope, text = R.string.app_name)
             }
         ) {
             val visibleState = remember {
@@ -181,7 +190,7 @@ fun RequestSubmissionPage(
                         ),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Spacer(modifier = Modifier.height(128.dp))
+                    Spacer(modifier = Modifier.height(72.dp))
 
                     //SubmitHeading()
 
@@ -212,7 +221,7 @@ fun RequestSubmissionPage(
                                 trailingImageVector = null,
                                 iconButtonOnClick = { /*TODO*/ },
                                 visibility = null,
-                                error = false
+                                error = true
                             )
 
                             OutlinedTextFiledGenerator(
@@ -222,7 +231,7 @@ fun RequestSubmissionPage(
                                 trailingImageVector = null,
                                 iconButtonOnClick = { /*TODO*/ },
                                 visibility = null,
-                                error = false
+                                error = true
                             )
 
                             OutlinedTextFiledGenerator(
@@ -232,7 +241,17 @@ fun RequestSubmissionPage(
                                 trailingImageVector = null,
                                 iconButtonOnClick = { /*TODO*/ },
                                 visibility = null,
-                                error = false
+                                error = true
+                            )
+
+                            OutlinedTextFiledGenerator(
+                                onValueChange = {ownerName = it},
+                                labelText = R.string.owner_name,
+                                leadingImageVector = Icons.Outlined.Person,
+                                trailingImageVector = null,
+                                iconButtonOnClick = { /*TODO*/ },
+                                visibility = null,
+                                error = true
                             )
 
                             OutlinedTextFiledGenerator(
@@ -242,7 +261,7 @@ fun RequestSubmissionPage(
                                 trailingImageVector = null,
                                 iconButtonOnClick = { /*TODO*/ },
                                 visibility = null,
-                                error = false
+                                error = true
                             )
 
                             OutlinedTextFiledGenerator(
@@ -250,19 +269,24 @@ fun RequestSubmissionPage(
                                 labelText = R.string.add_image,
                                 leadingImageVector = Icons.Outlined.Add,
                                 trailingImageVector = null,
+                                iconButtonOnClick = {
+                                    singlePhotoPicker.launch(
+                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                    )
+                                },
+                                visibility = null,
+                                error = true
+                            )
+
+                            OutlinedTextFiledGenerator(
+                                onValueChange = {payment = it},
+                                labelText = R.string.payment,
+                                leadingImageVector = Icons.Outlined.Money,
+                                trailingImageVector = null,
                                 iconButtonOnClick = { /*TODO*/ },
                                 visibility = null,
-                                error = false
+                                error = true
                             )
-                            Button(onClick = {
-                                singlePhotoPicker.launch(
-                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                                )
-
-                            }){
-                                Text("Pick Single Image")
-                            }
-
 
                             EntryPageButtons(
                                 enabled=true,

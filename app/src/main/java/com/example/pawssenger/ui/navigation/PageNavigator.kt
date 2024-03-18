@@ -27,6 +27,7 @@ import com.example.pawssenger.data.NavigationDrawerData
 import com.example.pawssenger.data.signup.SignUpViewModel
 import com.example.pawssenger.data.signup.SignupUIEvent
 import com.example.pawssenger.ui.screens.LogInPage
+import com.example.pawssenger.ui.screens.ProfilePage
 import com.example.pawssenger.ui.screens.RequestBrowser
 import com.example.pawssenger.ui.screens.RequestSubmissionPage
 import com.example.pawssenger.ui.screens.SignUpPage
@@ -36,7 +37,8 @@ enum class PawssengerScreen() {
     Login,
     SignUp,
     RequestBrowse,
-    RequestSubmit
+    RequestSubmit,
+    Profile
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -109,14 +111,18 @@ fun PawssengerApp(
                 drawerState = drawerState,
                 scope = scope,
                 drawerContent = drawerContent,
-                onProfileClick = { selectedItemIndex = 0},
+                onProfileClick = {
+                    selectedItemIndex = 0
+                    navController.navigate(route = PawssengerScreen.Profile.name)
+                                 },
                 onDashboardClick = {selectedItemIndex = 1},
                 onLocateClick = {selectedItemIndex = 2},
                 onLogOutClick = {
                     selectedItemIndex = 3
                     navController.popBackStack(route = PawssengerScreen.Entry.name, inclusive = false)
                 },
-                selectedItemIndex = selectedItemIndex
+                selectedItemIndex = selectedItemIndex,
+                signUpViewModel = signUpViewModel
             )
         }
 
@@ -127,6 +133,31 @@ fun PawssengerApp(
                 scope = scope,
                 onProfileClick = {
                     selectedItemIndex = 0
+
+                },
+                onDashboardClick = {
+                    selectedItemIndex = 1
+                },
+                onLocateClick = {
+                    selectedItemIndex = 2
+                },
+                onLogOutClick = {
+                    selectedItemIndex = 3
+                    logInViewModel.onEvent(LoginUIEvent.LogoutButtonClicked)
+                    navController.popBackStack(route = PawssengerScreen.Entry.name, inclusive = false)
+                },
+                selectedItemIndex = selectedItemIndex
+            )
+        }
+        
+        composable(route = PawssengerScreen.Profile.name) {
+            ProfilePage(
+                drawerContent = drawerContent,
+                drawerState = drawerState,
+                scope = scope,
+                onProfileClick = {
+                    selectedItemIndex = 0
+                    navController.navigate(route = PawssengerScreen.Profile.name)
                 },
                 onDashboardClick = {
                     selectedItemIndex = 1

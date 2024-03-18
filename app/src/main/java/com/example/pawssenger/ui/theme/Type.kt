@@ -52,6 +52,13 @@ val Typography = Typography(
     )
 
 //    bodySmall = TextStyle(
+//        fontFamily = Montserrat,
+//        fontWeight = FontWeight.Medium,
+//        fontSize = 28.sp,
+//        letterSpacing = 2.5.sp
+//    )
+
+//    bodySmall = TextStyle(
 //        fontFamily = Poppins,
 //        fontWeight = FontWeight.Bold,
 //        fontSize = 32.sp

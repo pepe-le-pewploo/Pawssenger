@@ -12,20 +12,28 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,60 +47,107 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pawssenger.R
+import com.example.pawssenger.data.NavigationDrawerContent
+import com.example.pawssenger.data.NavigationDrawerData
+import com.example.pawssenger.ui.components.PawssengerTopAppBar
+import com.example.pawssenger.ui.components.PresentDrawerContent
 import com.example.pawssenger.ui.theme.PawssengerTheme
+import kotlinx.coroutines.CoroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfilePage() {
-    Scaffold(
-        topBar = {
-            ProfileTopBar()
-        }
-    ) { it ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(it)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.minty),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+fun ProfilePage(
+    drawerContent:List<NavigationDrawerData> = NavigationDrawerContent().drawerContent(),
+    drawerState: DrawerState,
+    scope: CoroutineScope,
+    onLogOutClick: () ->Unit,
+    onProfileClick:() ->Unit,
+    onDashboardClick:() ->Unit,
+    onLocateClick:()->Unit,
+    selectedItemIndex:Int
+) {
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        gesturesEnabled = true,
+        drawerContent = {
+            ModalDrawerSheet(
                 modifier = Modifier
-                    .size(150.dp)
-                    .clip(CircleShape)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, top = 16.dp, end = 16.dp)
             ) {
-                Detail(
-                    imageVector = Icons.Default.Person,
-                    headText = "Name",
-                    descriptText = "Nazmul Hossen Rahul"
-                )
+                LazyColumn(contentPadding = NavigationDrawerItemDefaults.ItemPadding){
+                    itemsIndexed(drawerContent) { index, items ->
+                        val passFunction:()->Unit = when(index){
+                            0 -> onProfileClick
+                            1 -> onDashboardClick
+                            2 -> onLocateClick
+                            3 -> onLogOutClick
+                            else -> { {} }
+                        }
+                        PresentDrawerContent(
+                            index = index,
+                            items = items,
+                            selectedIndex = selectedItemIndex,
+                            onClick = passFunction
+                        )
+                        Divider()
+                    }
 
-                giveSpace()
-
-                Detail(
-                    imageVector = Icons.Default.Email,
-                    headText = "Email Id",
-                    descriptText = "nazmul@gmail.com"
-                )
-
-                giveSpace()
-
-                Detail(
-                    imageVector = Icons.Default.Phone,
-                    headText = "Contact No.",
-                    descriptText = "012345678"
-                )
-
-                Spacer(modifier = Modifier.height(64.dp))
-
-                CardStuffs()
+                }
             }
+        }
+    ){
+        Scaffold(
+            topBar = {
+                PawssengerTopAppBar(scope = scope, text = R.string.profile, drawerState = drawerState)
+            }
+        ) { it ->
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(it)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.minty),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(CircleShape)
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+                ) {
+                    Detail(
+                        imageVector = Icons.Default.Person,
+                        headText = "Name",
+                        descriptText = "Nazmul Hossen Rahul"
+                    )
 
+                    giveSpace()
+
+                    Detail(
+                        imageVector = Icons.Default.Email,
+                        headText = "Email Id",
+                        descriptText = "nazmul@gmail.com"
+                    )
+
+                    giveSpace()
+
+                    Detail(
+                        imageVector = Icons.Default.Phone,
+                        headText = "Contact No.",
+                        descriptText = "012345678"
+                    )
+
+                    giveSpace()
+
+                    Detail(imageVector = Icons.Default.Group,
+                        headText = "User Role",
+                        descriptText = "Pet Owner"
+                    )
+                }
+
+            }
         }
     }
 }
@@ -100,37 +155,6 @@ fun ProfilePage() {
 @Composable
 fun giveSpace(){
     Spacer(modifier = Modifier.height(12.dp))
-}
-
-@Composable
-fun CardStuffs() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        MakeCards(text = "Preferences", imageVector = Icons.Default.Add)
-//        Spacer(modifier = Modifier.width(20.dp))
-        MakeCards(text = "Listings", imageVector = Icons.Default.Home)
-    }
-}
-
-@Composable
-fun MakeCards(text:String, imageVector: ImageVector){
-    Card(
-        modifier = Modifier
-            .size(150.dp)
-            .clickable { }
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(text = text)
-            Icon(imageVector = imageVector, contentDescription =null )
-
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -185,7 +209,15 @@ fun Detail(imageVector: ImageVector, headText: String, descriptText: String) {
 @Composable
 fun ProfilePagePreview() {
     PawssengerTheme {
-        ProfilePage()
+//        ProfilePage(
+//            drawerState = ,
+//            scope = ,
+//            onLogOutClick = { /*TODO*/ },
+//            onProfileClick = { /*TODO*/ },
+//            onDashboardClick = { /*TODO*/ },
+//            onLocateClick = { /*TODO*/ },
+//            selectedItemIndex =
+//        )
     }
 }
 

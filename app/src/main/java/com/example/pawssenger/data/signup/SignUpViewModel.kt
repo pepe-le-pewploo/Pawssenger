@@ -54,6 +54,12 @@ class SignUpViewModel: ViewModel() {
                     userName = event.userName
                 )
             }
+            is SignupUIEvent.RadioButtonClicked->{
+                registrationUIState.value = registrationUIState.value.copy(
+                    asTransporter = event.transporter
+                )
+                printState()
+            }
         }
     }
 

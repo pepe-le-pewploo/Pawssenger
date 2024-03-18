@@ -5,5 +5,7 @@ data class petUiState(
     val petName:String="",
     val dropOffLocation:String="",
     val pickUpLocation:String="",
+    val ownerName:String = "",
+    val payment:String = "",
     val image:String=""
 )

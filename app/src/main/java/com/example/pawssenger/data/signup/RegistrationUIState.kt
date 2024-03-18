@@ -6,7 +6,6 @@ data class RegistrationUIState(
     var email:String="",
     var password:String="",
     val userName:String="",
-    var asUser: Boolean = true,
     val asTransporter: Boolean = false,
 
     var firstNameError :Boolean = false,
