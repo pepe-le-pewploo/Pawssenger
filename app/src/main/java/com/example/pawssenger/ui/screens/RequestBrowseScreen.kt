@@ -1,5 +1,6 @@
 package com.example.pawssenger.ui.screens
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
@@ -49,6 +50,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -73,7 +75,9 @@ import com.example.pawssenger.data.BrowsePetData
 import com.example.pawssenger.data.NavigationDrawerContent
 import com.example.pawssenger.data.NavigationDrawerData
 import com.example.pawssenger.data.PetData
+import com.example.pawssenger.data.ProfileUiState
 import com.example.pawssenger.data.ProfileViewModel
+import com.example.pawssenger.data.login.LogInViewModel
 import com.example.pawssenger.data.petData.petUiState
 import com.example.pawssenger.data.signup.SignUpViewModel
 import com.example.pawssenger.ui.components.PawssengerTopAppBar
@@ -98,9 +102,20 @@ fun RequestBrowser(
     onFilterClick:() -> Unit,
     selectedItemIndex:Int,
     signUpViewModel: SignUpViewModel = viewModel(),
-    actionButtonOnClick:()->Unit
-   // profileViewModel: ProfileViewModel = viewModel()
+    actionButtonOnClick:()->Unit,
+    loginViewModel: LogInViewModel= viewModel(),
+    profileViewModel: ProfileViewModel = viewModel(),
+    fromLogIn:Boolean
 ) {
+    val email= if(!fromLogIn) signUpViewModel.loginUIState.value.email else loginViewModel.loginUIState.value.email
+    val profiles=profileViewModel.stateList
+    var profile= mutableStateOf(ProfileUiState())
+    for(p in profiles.value){
+        if(p.email==email){
+            profile.value=p
+            Log.d("AgainMySelfTag", p.toString())
+        }
+    }
     var Pets=petData.stateList.value
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -137,7 +152,7 @@ fun RequestBrowser(
                 PawssengerTopAppBar(drawerState = drawerState, scope = scope, text = R.string.app_name, actionButtonOnClick = actionButtonOnClick)
             },
             floatingActionButton = {
-                if(!signUpViewModel.registrationUIState.value.asTransporter){
+                if(profile.value.role == "Pet Owner"){
                     FloatingActionButton(
                         onClick = onClickFloatingActionButton,
                         containerColor = MaterialTheme.colorScheme.background
@@ -154,7 +169,7 @@ fun RequestBrowser(
                     PetItem(
                         pet = it,
                         modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
-                        signUpViewModel = signUpViewModel
+                        profile = profile
                     )
                 }
             }
@@ -167,7 +182,7 @@ fun RequestBrowser(
 fun PetItem(
     pet: petUiState,
     modifier: Modifier = Modifier,
-    signUpViewModel: SignUpViewModel = viewModel()
+    profile: MutableState<ProfileUiState>
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -216,8 +231,8 @@ fun PetItem(
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(dimensionResource(id = R.dimen.padding_small)),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly
+                    verticalAlignment = Alignment.CenterVertically
+//                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     ExtraInfo(
                         petName = pet.petName,
@@ -232,9 +247,9 @@ fun PetItem(
                         )
                     )
 
-//                    Spacer(modifier = Modifier.width(56.dp))
+                    Spacer(modifier = Modifier.width(56.dp))
 
-                    if(signUpViewModel.registrationUIState.value.asTransporter){
+                    if(profile.value.role == "Transporter"){
                         Button(
                             onClick = { acceptState = true },
                             modifier = Modifier.width(128.dp),

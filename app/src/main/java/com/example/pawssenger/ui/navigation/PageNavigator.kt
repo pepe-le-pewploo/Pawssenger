@@ -48,7 +48,7 @@ enum class PawssengerScreen() {
 fun PawssengerApp(
     navController: NavHostController = rememberNavController(),
     signUpViewModel: SignUpViewModel = viewModel(),
-    logInViewModel: LogInViewModel = viewModel()
+    logInViewModel: LogInViewModel = viewModel(),
     //profileViewModel: ProfileViewModel = viewModel()
 ) {
     val TAG = "navigation"
@@ -134,11 +134,13 @@ fun PawssengerApp(
                     selectedItemIndex = 3
                 },
                 selectedItemIndex = selectedItemIndex,
+                loginViewModel = logInViewModel,
                 signUpViewModel = signUpViewModel,
                 actionButtonOnClick = {
                     navController.navigate(route = PawssengerScreen.Profile.name)
-                }
-               // profileViewModel = profileViewModel
+                },
+                fromLogIn = fromLogIn
+                //profileViewModel = profileViewModel
             )
         }
 
