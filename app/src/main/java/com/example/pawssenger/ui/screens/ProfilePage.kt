@@ -1,5 +1,6 @@
 package com.example.pawssenger.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +42,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -54,6 +56,8 @@ import com.example.pawssenger.data.NavigationDrawerData
 import com.example.pawssenger.data.ProfileUiState
 import com.example.pawssenger.data.ProfileViewModel
 import com.example.pawssenger.data.login.LogInViewModel
+import com.example.pawssenger.data.login.LoginUIEvent
+import com.example.pawssenger.data.signup.SignUpViewModel
 import com.example.pawssenger.ui.components.PawssengerTopAppBar
 import com.example.pawssenger.ui.components.PresentDrawerContent
 import com.example.pawssenger.ui.theme.PawssengerTheme
@@ -72,14 +76,18 @@ fun ProfilePage(
     onFilterClick:()->Unit,
     selectedItemIndex:Int,
     loginViewModel:LogInViewModel = viewModel(),
-    profileViewModel: ProfileViewModel =viewModel()
+    signUpViewModel: SignUpViewModel = viewModel(),
+    profileViewModel: ProfileViewModel =viewModel(),
+    actionButtonOnClick:() -> Unit,
+    fromLogIn:Boolean = false
 ) {
-    val email=loginViewModel.loginUIState.value.email
+    val email= if(!fromLogIn) signUpViewModel.loginUIState.value.email else loginViewModel.loginUIState.value.email
     val profiles=profileViewModel.stateList
     var profile= mutableStateOf(ProfileUiState())
     for(p in profiles.value){
         if(p.email==email){
             profile.value=p
+            Log.d("MySelfTag", p.toString())
         }
     }
     ModalNavigationDrawer(
@@ -114,7 +122,7 @@ fun ProfilePage(
     ){
         Scaffold(
             topBar = {
-                PawssengerTopAppBar(scope = scope, text = R.string.profile, drawerState = drawerState)
+                PawssengerTopAppBar(scope = scope, text = R.string.profile, drawerState = drawerState, actionButtonOnClick = actionButtonOnClick)
             }
         ) { it ->
             Column(
@@ -145,7 +153,7 @@ fun ProfilePage(
                     Detail(
                         imageVector = Icons.Default.Email,
                         headText = "Email Id",
-                        descriptText = profile.value.email
+                        descriptText = "${profile.value.email}"
                     )
 
                     giveSpace()
@@ -153,14 +161,14 @@ fun ProfilePage(
                     Detail(
                         imageVector = Icons.Default.Phone,
                         headText = "Contact No.",
-                        descriptText = profile.value.contactNo
+                        descriptText = "${profile.value.contactNo}"
                     )
 
                     giveSpace()
 
                     Detail(imageVector = Icons.Default.Group,
                         headText = "User Role",
-                        descriptText = profile.value.role
+                        descriptText = "${profile.value.role}"
                     )
                 }
 
@@ -238,4 +246,162 @@ fun ProfilePagePreview() {
     }
 }
 
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun Profile(loginViewModel: LogInViewModel = viewModel(), profileViewModel: ProfileViewModel =viewModel()) {
+//    val email=loginViewModel.loginUIState.value.email
+//    val profiles=profileViewModel.stateList
+//    var profile= mutableStateOf(ProfileUiState())
+//    for(p in profiles.value){
+//        if(p.Email==email){
+//            profile.value=p
+//        }
+//    }
+//    Scaffold(
+//        topBar = {
+//            ProfileTopBar()
+//        }
+//    ) { it ->
+//        Column(
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            modifier = Modifier.padding(it)
+//        ) {
+//            Image(
+//                painter = painterResource(id = R.drawable.minty),
+//                contentDescription = null,
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier
+//                    .size(150.dp)
+//                    .clip(CircleShape)
+//            )
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+//            ) {
+//                Detail(
+//                    imageVector = Icons.Default.Person,
+//                    headText = "Name",
+//                    descriptText = "${profile.value.Fname} ${profile.value.Lname}"
+//                )
+//
+//                giveSpace()
+//
+//                Detail(
+//                    imageVector = Icons.Default.Email,
+//                    headText = "Email Id",
+//                    descriptText = "${profile.value.Email}"
+//                )
+//
+//                giveSpace()
+//
+//                Detail(
+//                    imageVector = Icons.Default.Phone,
+//                    headText = "Contact No.",
+//                    descriptText = "012345678"
+//                )
+//
+//                Spacer(modifier = Modifier.height(64.dp))
+//
+//               // CardStuffs()
+//            }
+//
+//        }
+//    }
+////    SystemBackButtonHandler {
+////        AppRouter.navigateTo(Screen.HomeScreen)
+////    }
+//}
+//
+//@Composable
+//fun giveSpace(){
+//    Spacer(modifier = Modifier.height(12.dp))
+//}
+//
+////@Composable
+////fun CardStuffs() {
+////    Row(
+////        modifier = Modifier.fillMaxWidth(),
+////        horizontalArrangement = Arrangement.SpaceEvenly
+////    ) {
+////        MakeCards(event={AppRouter.navigateTo(Screen.Preference)},text = "Preferences", imageVector = Icons.Default.Add)
+//////        Spacer(modifier = Modifier.width(20.dp))
+////        MakeCards(event={AppRouter.navigateTo(Screen.MyListings)},text = "Listings", imageVector = Icons.Default.Home)
+////    }
+////}
+//
+////@Composable
+////fun MakeCards(event:()->Unit,text:String, imageVector: ImageVector){
+////    Card(
+////        modifier = Modifier
+////            .size(150.dp)
+////            .clickable {event.invoke() }
+////    ) {
+////        Column(
+////            modifier = Modifier.fillMaxSize(),
+////            horizontalAlignment = Alignment.CenterHorizontally,
+////            verticalArrangement = Arrangement.Center
+////        ) {
+////            Text(text = text)
+////            Icon(imageVector = imageVector, contentDescription =null )
+////
+////        }
+////    }
+////}
+//
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun ProfileTopBar(
+//    loginViewModel: LogInViewModel=viewModel()
+//) {
+//    CenterAlignedTopAppBar(
+//        title = {
+//            Text(text = "Profile")
+//        },
+//        navigationIcon = {
+//            IconButton(
+//                onClick = {}
+//            ){
+//                Icon(imageVector = Icons.Default.Home, contentDescription = null)
+//            }
+//        },
+//        actions = {
+//            IconButton(
+//                onClick = {loginViewModel.onEvent(LoginUIEvent.LogoutButtonClicked)}
+//            ){
+//                Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = null)
+//            }
+//        }
+//    )
+//}
+//
+//@Composable
+//fun Detail(imageVector: ImageVector, headText: String, descriptText: String) {
+//    Row(
+//        modifier = Modifier.padding(8.dp),
+//        verticalAlignment = Alignment.CenterVertically
+//    ) {
+//        Icon(imageVector = imageVector, contentDescription = null)
+//
+//        Spacer(modifier = Modifier.width(12.dp))
+//
+//        Column {
+//            Text(
+//                text = headText,
+//                fontWeight = FontWeight.Bold
+//            )
+//            Text(
+//                text = descriptText
+//            )
+//        }
+//    }
+//}
+//
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun ProfilePagePreview() {
+//    PawssengerTheme {
+//        Profile()
+//    }
+//}
 

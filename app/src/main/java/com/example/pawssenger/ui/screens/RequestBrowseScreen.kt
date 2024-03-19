@@ -9,6 +9,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -72,6 +73,7 @@ import com.example.pawssenger.data.BrowsePetData
 import com.example.pawssenger.data.NavigationDrawerContent
 import com.example.pawssenger.data.NavigationDrawerData
 import com.example.pawssenger.data.PetData
+import com.example.pawssenger.data.ProfileViewModel
 import com.example.pawssenger.data.petData.petUiState
 import com.example.pawssenger.data.signup.SignUpViewModel
 import com.example.pawssenger.ui.components.PawssengerTopAppBar
@@ -95,7 +97,9 @@ fun RequestBrowser(
     onLogOutClick:() -> Unit,
     onFilterClick:() -> Unit,
     selectedItemIndex:Int,
-    signUpViewModel: SignUpViewModel = viewModel()
+    signUpViewModel: SignUpViewModel = viewModel(),
+    actionButtonOnClick:()->Unit
+   // profileViewModel: ProfileViewModel = viewModel()
 ) {
     var Pets=petData.stateList.value
     ModalNavigationDrawer(
@@ -130,7 +134,7 @@ fun RequestBrowser(
     ) {
         Scaffold(
             topBar = {
-                PawssengerTopAppBar(drawerState = drawerState, scope = scope, text = R.string.app_name)
+                PawssengerTopAppBar(drawerState = drawerState, scope = scope, text = R.string.app_name, actionButtonOnClick = actionButtonOnClick)
             },
             floatingActionButton = {
                 if(!signUpViewModel.registrationUIState.value.asTransporter){
@@ -212,7 +216,8 @@ fun PetItem(
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(dimensionResource(id = R.dimen.padding_small)),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     ExtraInfo(
                         petName = pet.petName,
@@ -227,7 +232,7 @@ fun PetItem(
                         )
                     )
 
-                    Spacer(modifier = Modifier.width(56.dp))
+//                    Spacer(modifier = Modifier.width(56.dp))
 
                     if(signUpViewModel.registrationUIState.value.asTransporter){
                         Button(

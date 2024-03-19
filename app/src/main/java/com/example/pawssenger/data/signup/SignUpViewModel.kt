@@ -53,7 +53,22 @@ class SignUpViewModel: ViewModel() {
                 printState()
             }
             is SignupUIEvent.SignUpButtonClicked->{
-                CreateProfile(registrationUIState = registrationUIState)
+                val db = Firebase.firestore
+                val newProfile = hashMapOf(
+                    "firstName" to registrationUIState.value.firstName,
+                    "lastName" to registrationUIState.value.lastName,
+                    "email" to registrationUIState.value.email,
+                    "contactNo" to registrationUIState.value.contactNo,
+                    "role" to if(registrationUIState.value.asTransporter) "Transporter" else "Pet Owner"
+                )
+                db.collection("profile")
+                    .add(newProfile)
+                    .addOnSuccessListener { documentReference ->
+                        //Log.d("newHouseAdded", "DocumentSnapshot added with ID: ${documentReference.id}")
+                    }
+                    .addOnFailureListener { e ->
+                        // Log.w("failedHouseAdded", "Error adding document", e)
+                    }
                 signUp(navController = event.navController)
                 printState()
             }
@@ -70,25 +85,6 @@ class SignUpViewModel: ViewModel() {
                 printState()
             }
         }
-    }
-
-    private fun CreateProfile(registrationUIState: MutableState<RegistrationUIState>){
-        val db = Firebase.firestore
-        val newProfile = hashMapOf(
-            "firstName" to registrationUIState.value.firstName,
-            "lastName" to registrationUIState.value.lastName,
-            "email" to registrationUIState.value.email,
-            "contactNo" to registrationUIState.value.contactNo,
-            "role" to if(registrationUIState.value.asTransporter) "Transporter" else "Pet Owner"
-        )
-        db.collection("profile")
-            .add(newProfile)
-            .addOnSuccessListener { documentReference ->
-                //Log.d("newHouseAdded", "DocumentSnapshot added with ID: ${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-               // Log.w("failedHouseAdded", "Error adding document", e)
-            }
     }
 
     private fun signUp(navController:NavController) {
@@ -111,6 +107,8 @@ class SignUpViewModel: ViewModel() {
                 Log.d(TAG, " isSuccessful = ${it.isSuccessful}")
                 signUpInProgress.value = false
                 if(it.isSuccessful){
+                    //navController.popBackStack(route = PawssengerScreen.Entry.name, inclusive = true)
+                    //navController.navigate(PawssengerScreen.Login.name)
                     navController.navigate(PawssengerScreen.RequestBrowse.name)
                 }
             }
@@ -158,5 +156,6 @@ class SignUpViewModel: ViewModel() {
     private fun printState(){
         Log.d(TAG, "Inside_printState")
         Log.d(TAG, registrationUIState.value.toString())
+        Log.d(TAG, loginUIState.value.toString())
     }
 }

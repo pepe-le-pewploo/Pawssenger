@@ -3,6 +3,7 @@ package com.example.pawssenger.ui.components
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerState
@@ -27,7 +28,8 @@ fun PawssengerTopAppBar(
     modifier: Modifier = Modifier,
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
     scope: CoroutineScope,
-    @StringRes text: Int
+    @StringRes text: Int,
+    actionButtonOnClick:()->Unit
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -53,6 +55,11 @@ fun PawssengerTopAppBar(
                 Icon(imageVector = Icons.Outlined.Menu, contentDescription = null)
             }
         },
-        modifier = modifier
+        modifier = modifier,
+        actions = {
+            IconButton(onClick = actionButtonOnClick) {
+                Icon(imageVector = Icons.Outlined.Home, contentDescription = null)
+            }
+        }
     )
 }

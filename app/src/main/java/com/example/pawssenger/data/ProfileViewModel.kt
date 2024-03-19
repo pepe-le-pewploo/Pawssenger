@@ -30,14 +30,9 @@ suspend fun getProfileFromFirestore(): MutableList<ProfileUiState> {
                 Log.d("hello","$it")
                 val result= it.toObject(ProfileUiState::class.java)
                 aboutList.add(result)
-                ProfileState(aboutList)
             }
     }catch (e: FirebaseFirestoreException){
         Log.d("error","getdata")
     }
     return aboutList
-}
-
-fun ProfileState(aboutList:MutableList<ProfileUiState>){
-    Log.d("ProfileState", aboutList.toString())
 }

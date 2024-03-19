@@ -88,7 +88,8 @@ fun RequestSubmissionPage(
     onDashboardClick:() ->Unit,
     onLocateClick:()->Unit,
     onFilterClick:()->Unit,
-    selectedItemIndex:Int
+    selectedItemIndex:Int,
+    actionButtonOnClick:()->Unit
 ) {
     var uri by remember{
         mutableStateOf<Uri?>(null)
@@ -159,7 +160,7 @@ fun RequestSubmissionPage(
     ){
         Scaffold(
             topBar = {
-                PawssengerTopAppBar(drawerState = drawerState, scope = scope, text = R.string.app_name)
+                PawssengerTopAppBar(drawerState = drawerState, scope = scope, text = R.string.app_name, actionButtonOnClick = actionButtonOnClick)
             }
         ) {
             val visibleState = remember {

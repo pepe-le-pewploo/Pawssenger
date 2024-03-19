@@ -7,6 +7,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -24,6 +25,7 @@ import com.example.pawssenger.data.login.LogInViewModel
 import com.example.pawssenger.data.login.LoginUIEvent
 import com.example.pawssenger.data.NavigationDrawerContent
 import com.example.pawssenger.data.NavigationDrawerData
+import com.example.pawssenger.data.ProfileViewModel
 import com.example.pawssenger.data.signup.SignUpViewModel
 import com.example.pawssenger.data.signup.SignupUIEvent
 import com.example.pawssenger.ui.screens.LogInPage
@@ -47,6 +49,7 @@ fun PawssengerApp(
     navController: NavHostController = rememberNavController(),
     signUpViewModel: SignUpViewModel = viewModel(),
     logInViewModel: LogInViewModel = viewModel()
+    //profileViewModel: ProfileViewModel = viewModel()
 ) {
     val TAG = "navigation"
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -62,6 +65,10 @@ fun PawssengerApp(
 
     var selectedItemIndex by rememberSaveable {
         mutableIntStateOf(0)
+    }
+
+    var fromLogIn by rememberSaveable {
+        mutableStateOf(false)
     }
 
     NavHost(
@@ -82,6 +89,7 @@ fun PawssengerApp(
         composable(route = PawssengerScreen.Login.name) {
             LogInPage(
                 onClickLogInButton = {
+                    fromLogIn = true
                     logInViewModel.onEvent(LoginUIEvent.LoginButtonClicked(navController = navController))
                 },
                 onClickSignUpButton = {
@@ -97,6 +105,7 @@ fun PawssengerApp(
                     navController.navigate(PawssengerScreen.Login.name)
                 },
                 onClickSignUpButton = {
+                    fromLogIn = false
                     signUpViewModel.onEvent(SignupUIEvent.SignUpButtonClicked(navController = navController))
                 },
                 signUpViewModel = signUpViewModel
@@ -125,7 +134,11 @@ fun PawssengerApp(
                     selectedItemIndex = 3
                 },
                 selectedItemIndex = selectedItemIndex,
-                signUpViewModel = signUpViewModel
+                signUpViewModel = signUpViewModel,
+                actionButtonOnClick = {
+                    navController.navigate(route = PawssengerScreen.Profile.name)
+                }
+               // profileViewModel = profileViewModel
             )
         }
 
@@ -152,7 +165,10 @@ fun PawssengerApp(
                 onFilterClick = {
                     selectedItemIndex = 3
                 },
-                selectedItemIndex = selectedItemIndex
+                selectedItemIndex = selectedItemIndex,
+                actionButtonOnClick = {
+                    navController.navigate(route = PawssengerScreen.RequestBrowse.name)
+                }
             )
         }
         
@@ -179,8 +195,16 @@ fun PawssengerApp(
                 onFilterClick = {
                     selectedItemIndex = 3
                 },
-                selectedItemIndex = selectedItemIndex
+                selectedItemIndex = selectedItemIndex,
+                actionButtonOnClick = {
+                    navController.navigate(route = PawssengerScreen.RequestBrowse.name)
+                },
+                loginViewModel = logInViewModel,
+                signUpViewModel = signUpViewModel,
+                fromLogIn = fromLogIn
+                //profileViewModel = profileViewModel
             )
+            //Profile()
         }
     }
 }
