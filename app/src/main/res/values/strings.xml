@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">Pawssenger</string>
+    <string name="app_description">A Pet Transport App</string>
+    <string name="log_in">Log In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="username">Username/Email</string>
+    <string name="password">Password</string>
+    <string name="newuser">New User?</string>
+    <string name="firstname">First Name</string>
+    <string name="lastname">Last Name</string>
+    <string name="username2">Username</string>
+    <string name="emailaddress">Email Address</string>
+    <string name="accountexists">Already have an account?</string>
+    <string name="browse">Browse</string>
+    <string name="minty">Minty</string>
+    <string name="kaju">Kaju</string>
+    <string name="mini">Mini</string>
+    <string name="mili">Mili</string>
+    <string name="tiger">Tiger</string>
+    <string name="bahadur">Bahadur</string>
+    <string name="Koji">Koji</string>
+    <string name="shinji">Shinji</string>
+    <string name="kiba">Kiba</string>
+    <string name="akamaru">Akamaru</string>
+
+    <string name="mamun">Mamun</string>
+    <string name="piplu">Piplu</string>
+    <string name="nazmul">Nazmul</string>
+    <string name="rahul">Rahul</string>
+    <string name="saif">Saif</string>
+    <string name="seiam">Seiam</string>
+    <string name="imran">Imran</string>
+    <string name="huda">Irfan</string>
+
+    <string name="sustgate">SUST Gate</string>
+    <string name="topobon">Topobon</string>
+    <string name="lakecity">Lake City</string>
+    <string name="subidbazar">Subidbazar</string>
+    <string name="amberkhana">Amberkhana</string>
+    <string name="muradpur">Muradpur</string>
+    <string name="gec">GEC Circle</string>
+    <string name="kalamiabazar">Kalamia Bazar</string>
+    <string name="oxygen">Oxygen Circle</string>
+    <string name="chawkbazar">Chawkbazar</string>
+
+    <string name="contact1">01817210291</string>
+    <string name="contact2">01717210231</string>
+    <string name="contact3">01617210267</string>
+    <string name="contact4">01317210291</string>
+    <string name="contact5">01817210123</string>
+    <string name="contact6">01817210321</string>
+    <string name="contact7">01717210566</string>
+    <string name="contact8">01817210410</string>
+    <string name="contact9">01717210069</string>
+    <string name="contact10">01317210212</string>
+
+    <string name="pickuplocation">Pick Up: </string>
+    <string name="destination">Destination: </string>
+    <string name="name">Name: </string>
+    <string name="owner">Owner: </string>
+    <string name="contact">Contact: </string>
+    <string name="pet_details">Pet Details</string>
+    <string name="pet_name">Pet Name</string>
+    <string name="pick_up_location">Pick Up Location</string>
+    <string name="drop_off_location">Destination</string>
+    <string name="contact_info">Contact No.</string>
+    <string name="add_image">Add Image</string>
+    <string name="submit">Submit</string>
+    <string name="profile">Profile</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="logout">Log Out</string>
+    <string name="locate">Locate</string>
+    <string name="owner_name">Owner Name</string>
+    <string name="payment">Payment</string>
+    <string name="user_role">Register as a Transporter</string>
+    <string name="filter">Filter</string>
+    <string name="contact_no">Contact Number</string>
+    <string name="OTP">Enter OTP</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="unsubscribe">Unsubscribe</string>
+
+
+</resources>

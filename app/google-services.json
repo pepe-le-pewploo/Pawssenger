@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "972779580972",
+    "project_id": "pawssenger-d45ea",
+    "storage_bucket": "pawssenger-d45ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972779580972:android:e3b423901bac8f1937ab89",
+        "android_client_info": {
+          "package_name": "com.example.pawssenger"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1oLoLesBxawQrovY2hOazdflTc9Erbk4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
