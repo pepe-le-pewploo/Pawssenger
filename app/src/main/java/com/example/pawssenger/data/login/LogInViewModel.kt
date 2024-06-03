@@ -93,7 +93,7 @@ class LogInViewModel : ViewModel() {
             }
             .addOnFailureListener {
                 Log.d(TAG,"Inside_login_failure")
-                Log.d(TAG, it.localizedMessage)
+                it.localizedMessage?.let { it1 -> Log.d(TAG, it1) }
 
                 loginInProgress.value = false
             }

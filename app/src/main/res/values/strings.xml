@@ -75,6 +75,9 @@
     <string name="user_role">Register as a Transporter</string>
     <string name="filter">Filter</string>
     <string name="contact_no">Contact Number</string>
+    <string name="OTP">Enter OTP</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="unsubscribe">Unsubscribe</string>
 
 
 </resources>

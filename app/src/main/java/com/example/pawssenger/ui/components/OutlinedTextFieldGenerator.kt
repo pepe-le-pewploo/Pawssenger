@@ -92,7 +92,9 @@ fun OutlinedTextFiledGenerator(
             else KeyboardType.Email,
             imeAction = if(visibility!=null) ImeAction.Done else ImeAction.Next
         ),
-        isError = !error
+        isError = !error,
+        modifier = modifier
+
     )
 }
 
