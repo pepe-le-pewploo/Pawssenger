@@ -29,6 +29,7 @@ import com.example.pawssenger.data.ProfileViewModel
 import com.example.pawssenger.data.signup.SignUpViewModel
 import com.example.pawssenger.data.signup.SignupUIEvent
 import com.example.pawssenger.ui.screens.LogInPage
+import com.example.pawssenger.ui.screens.OtpVerifyScreen
 import com.example.pawssenger.ui.screens.ProfilePage
 import com.example.pawssenger.ui.screens.RequestBrowser
 import com.example.pawssenger.ui.screens.RequestSubmissionPage
@@ -40,7 +41,8 @@ enum class PawssengerScreen() {
     SignUp,
     RequestBrowse,
     RequestSubmit,
-    Profile
+    Profile,
+    OtpVerification
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -139,7 +141,8 @@ fun PawssengerApp(
                 actionButtonOnClick = {
                     navController.navigate(route = PawssengerScreen.Profile.name)
                 },
-                fromLogIn = fromLogIn
+                fromLogIn = fromLogIn,
+                navController = navController
                 //profileViewModel = profileViewModel
             )
         }
@@ -207,6 +210,13 @@ fun PawssengerApp(
                 //profileViewModel = profileViewModel
             )
             //Profile()
+        }
+
+        composable(route = PawssengerScreen.OtpVerification.name) {
+            OtpVerifyScreen(
+                navController = navController,
+                signUpViewModel = signUpViewModel
+            )
         }
     }
 }

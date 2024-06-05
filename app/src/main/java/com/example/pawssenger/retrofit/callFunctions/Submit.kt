@@ -9,14 +9,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+val requestParameters = RequestParameters(
+    appId = "APP_118867",
+    password = "a46785b83fc98b81ae80778189c0687a",
+    mobile = ""
+)
 fun submit() {
-    val requestParameters = RequestParameters(
-        appId = "APP_118867",
-        password = "a46785b83fc98b81ae80778189c0687a",
-        mobile = "8801812498064"
-    )
-
-
     val destinationService = ServiceBuilder.buildService(MyApiService::class.java)
     val requestCall = destinationService.requestOtp(requestParameters)
 

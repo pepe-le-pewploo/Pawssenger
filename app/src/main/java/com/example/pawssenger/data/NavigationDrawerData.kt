@@ -8,11 +8,15 @@ import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.Subscriptions
 import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Remove
+import androidx.compose.material.icons.outlined.Subscriptions
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +53,16 @@ class NavigationDrawerContent(){
                 name = R.string.filter,
                 selectedIcon = Icons.Filled.FilterList,
                 unselectedIcon = Icons.Outlined.FilterList
+            ),
+            NavigationDrawerData(
+                name = R.string.subscribe,
+                selectedIcon = Icons.Filled.Subscriptions,
+                unselectedIcon = Icons.Outlined.Subscriptions
+            ),
+            NavigationDrawerData(
+                name = R.string.unsubscribe,
+                selectedIcon = Icons.Filled.Remove,
+                unselectedIcon = Icons.Outlined.Remove
             ),
             NavigationDrawerData(
                 name = R.string.logout,

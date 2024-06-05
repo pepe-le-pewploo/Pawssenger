@@ -6,6 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.pawssenger.data.login.LoginUIState
+import com.example.pawssenger.retrofit.callFunctions.requestParameters
+import com.example.pawssenger.retrofit.callFunctions.submit
+import com.example.pawssenger.retrofit.callFunctions.verifyStatus
 import com.example.pawssenger.ui.navigation.PawssengerScreen
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -59,7 +62,7 @@ class SignUpViewModel: ViewModel() {
                     "lastName" to registrationUIState.value.lastName,
                     "email" to registrationUIState.value.email,
                     "contactNo" to registrationUIState.value.contactNo,
-                    "role" to if(registrationUIState.value.asTransporter) "Transporter" else "Pet Owner"
+                    "role" to if(registrationUIState.value.asTransporter) "Transporter" else "Pet Owner",
                 )
                 db.collection("profile")
                     .add(newProfile)
@@ -84,6 +87,7 @@ class SignUpViewModel: ViewModel() {
                 )
                 printState()
             }
+
         }
     }
 
@@ -109,7 +113,10 @@ class SignUpViewModel: ViewModel() {
                 if(it.isSuccessful){
                     //navController.popBackStack(route = PawssengerScreen.Entry.name, inclusive = true)
                     //navController.navigate(PawssengerScreen.Login.name)
-                    navController.navigate(PawssengerScreen.RequestBrowse.name)
+                    //navController.navigate(PawssengerScreen.RequestBrowse.name)
+                    requestParameters.mobile = registrationUIState.value.contactNo
+                    submit();
+                    navController.navigate(PawssengerScreen.OtpVerification.name)
                 }
             }
             .addOnFailureListener {

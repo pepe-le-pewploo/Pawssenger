@@ -1,6 +1,7 @@
 package com.example.pawssenger.data.login
 
 import androidx.navigation.NavController
+import java.lang.IllegalStateException
 
 sealed class LoginUIEvent {
     data class EmailChanged(val email:String): LoginUIEvent()

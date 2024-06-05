@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Subscriptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
@@ -169,6 +170,13 @@ fun ProfilePage(
                     Detail(imageVector = Icons.Default.Group,
                         headText = "User Role",
                         descriptText = "${profile.value.role}"
+                    )
+
+                    giveSpace()
+
+                    Detail(imageVector = Icons.Default.Subscriptions,
+                        headText = "Subscription Status",
+                        descriptText = if(subscriptionStatus.isRegistered) "Registered" else "Unregistered"
                     )
                 }
 

@@ -1,20 +1,14 @@
 package com.example.pawssenger.ui.screens
 
 import android.util.Log
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,21 +16,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -44,18 +33,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -63,16 +48,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.pawssenger.R
-import com.example.pawssenger.data.BrowsePetData
-import com.example.pawssenger.data.NavigationDrawerContent
 import com.example.pawssenger.data.NavigationDrawerData
 import com.example.pawssenger.data.PetData
 import com.example.pawssenger.data.ProfileUiState
@@ -80,12 +63,18 @@ import com.example.pawssenger.data.ProfileViewModel
 import com.example.pawssenger.data.login.LogInViewModel
 import com.example.pawssenger.data.petData.petUiState
 import com.example.pawssenger.data.signup.SignUpViewModel
+import com.example.pawssenger.data.status.SubscriptionStatus
+import com.example.pawssenger.retrofit.callFunctions.subscribeRequestParameters
+import com.example.pawssenger.retrofit.callFunctions.subscriptionOff
+import com.example.pawssenger.retrofit.callFunctions.subscriptionOn
+import com.example.pawssenger.retrofit.callFunctions.unsubscribeRequestParameters
+import com.example.pawssenger.retrofit.callFunctions.verifyStatus
 import com.example.pawssenger.ui.components.PawssengerTopAppBar
 import com.example.pawssenger.ui.components.PresentDrawerContent
-import com.example.pawssenger.ui.theme.PawssengerTheme
+import com.google.android.play.integrity.internal.s
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
+val subscriptionStatus = SubscriptionStatus(isRegistered = false)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RequestBrowser(
@@ -105,7 +94,8 @@ fun RequestBrowser(
     actionButtonOnClick:()->Unit,
     loginViewModel: LogInViewModel= viewModel(),
     profileViewModel: ProfileViewModel = viewModel(),
-    fromLogIn:Boolean
+    fromLogIn:Boolean,
+    navController: NavController = rememberNavController()
 ) {
     val email= if(!fromLogIn) signUpViewModel.loginUIState.value.email else loginViewModel.loginUIState.value.email
     val profiles=profileViewModel.stateList
@@ -116,6 +106,7 @@ fun RequestBrowser(
             Log.d("AgainMySelfTag", p.toString())
         }
     }
+
     var Pets=petData.stateList.value
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -131,7 +122,19 @@ fun RequestBrowser(
                             1 -> onDashboardClick
                             2 -> onLocateClick
                             3 -> onFilterClick
-                            4 -> onLogOutClick
+                            4 -> {
+                                {
+                                    subscribeRequestParameters.mobile = profile.value.contactNo
+                                    subscriptionOn(navController = navController, popBack = true)
+                                }
+                            }
+                            5 -> {
+                                {
+                                    unsubscribeRequestParameters.mobile = profile.value.contactNo
+                                    subscriptionOff(navController = navController, popBack = true)
+                                }
+                            }
+                            6 -> onLogOutClick
                             else -> { {} }
                         }
                         PresentDrawerContent(
@@ -152,7 +155,7 @@ fun RequestBrowser(
                 PawssengerTopAppBar(drawerState = drawerState, scope = scope, text = R.string.app_name, actionButtonOnClick = actionButtonOnClick)
             },
             floatingActionButton = {
-                if(profile.value.role == "Pet Owner"){
+                if(profile.value.role == "Pet Owner" && subscriptionStatus.isRegistered){
                     FloatingActionButton(
                         onClick = onClickFloatingActionButton,
                         containerColor = MaterialTheme.colorScheme.background
@@ -249,7 +252,7 @@ fun PetItem(
 
                     Spacer(modifier = Modifier.width(56.dp))
 
-                    if(profile.value.role == "Transporter"){
+                    if(profile.value.role == "Transporter" && subscriptionStatus.isRegistered){
                         Button(
                             onClick = { acceptState = true },
                             modifier = Modifier.width(128.dp),

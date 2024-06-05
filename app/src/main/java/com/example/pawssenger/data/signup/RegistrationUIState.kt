@@ -7,6 +7,7 @@ data class RegistrationUIState(
     var password:String="",
     val contactNo:String="",
     val asTransporter: Boolean = false,
+    val status: String="",
 
     var firstNameError :Boolean = false,
     var lastNameError : Boolean = false,

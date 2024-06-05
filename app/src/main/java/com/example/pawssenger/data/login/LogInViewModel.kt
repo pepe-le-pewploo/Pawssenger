@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.example.pawssenger.retrofit.callFunctions.verifyStatus
 import com.example.pawssenger.ui.navigation.PawssengerScreen
 import com.google.firebase.auth.FirebaseAuth
 import com.nativemobilebits.loginflow.data.rules.Validator
@@ -88,7 +89,8 @@ class LogInViewModel : ViewModel() {
                 if (it.isSuccessful) {
                     loginInProgress.value = false
                     //navController.popBackStack(PawssengerScreen.Entry.name, inclusive = true)
-                    navController.navigate(PawssengerScreen.RequestBrowse.name)
+//                    navController.navigate(PawssengerScreen.RequestBrowse.name)
+                    verifyStatus(navController)
                 }
             }
             .addOnFailureListener {
