@@ -1,7 +1,9 @@
 package com.example.pawssenger.retrofit.callFunctions
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.pawssenger.R
@@ -27,7 +29,7 @@ val unsubscribeRequestParameters = UnsubscribeRequestParameters(
     password = "a46785b83fc98b81ae80778189c0687a",
     mobile = ""
 )
-fun subscriptionOn(navController: NavController, popBack: Boolean = false) {
+fun subscriptionOn(navController: NavController, popBack: Boolean = false, context: Context) {
     val destinationService = ServiceBuilder.buildService(MyApiService::class.java)
     val requestCall = destinationService.subscribe(subscribeRequestParameters)
 
@@ -43,8 +45,8 @@ fun subscriptionOn(navController: NavController, popBack: Boolean = false) {
                     subscriptionStatus.isRegistered = true
                     verifyStatus(navController, popBack)
                 } else {
-                    //Log.e("MyActivity", "Confirm Subscription and press the button again")
-
+                    Log.e("MyActivity", "Confirm Subscription and press the button again")
+                    Toast.makeText(context, "Confirm Subscription and press the button again", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 // Handle unsuccessful response

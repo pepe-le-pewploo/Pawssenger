@@ -206,8 +206,9 @@ fun PawssengerApp(
                 },
                 loginViewModel = logInViewModel,
                 signUpViewModel = signUpViewModel,
-                fromLogIn = fromLogIn
-                //profileViewModel = profileViewModel
+                fromLogIn = fromLogIn,
+                //profileViewModel = profileViewModel,
+                navController = navController
             )
             //Profile()
         }

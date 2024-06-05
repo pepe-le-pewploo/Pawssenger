@@ -47,6 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -108,6 +109,7 @@ fun RequestBrowser(
     }
 
     var Pets=petData.stateList.value
+    val context = LocalContext.current
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = true,
@@ -125,7 +127,7 @@ fun RequestBrowser(
                             4 -> {
                                 {
                                     subscribeRequestParameters.mobile = profile.value.contactNo
-                                    subscriptionOn(navController = navController, popBack = true)
+                                    subscriptionOn(navController = navController, popBack = true, context = context)
                                 }
                             }
                             5 -> {

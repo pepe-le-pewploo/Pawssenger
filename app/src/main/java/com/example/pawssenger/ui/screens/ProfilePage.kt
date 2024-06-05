@@ -46,11 +46,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.pawssenger.R
 import com.example.pawssenger.data.NavigationDrawerContent
 import com.example.pawssenger.data.NavigationDrawerData
@@ -59,6 +62,10 @@ import com.example.pawssenger.data.ProfileViewModel
 import com.example.pawssenger.data.login.LogInViewModel
 import com.example.pawssenger.data.login.LoginUIEvent
 import com.example.pawssenger.data.signup.SignUpViewModel
+import com.example.pawssenger.retrofit.callFunctions.subscribeRequestParameters
+import com.example.pawssenger.retrofit.callFunctions.subscriptionOff
+import com.example.pawssenger.retrofit.callFunctions.subscriptionOn
+import com.example.pawssenger.retrofit.callFunctions.unsubscribeRequestParameters
 import com.example.pawssenger.ui.components.PawssengerTopAppBar
 import com.example.pawssenger.ui.components.PresentDrawerContent
 import com.example.pawssenger.ui.theme.PawssengerTheme
@@ -80,7 +87,8 @@ fun ProfilePage(
     signUpViewModel: SignUpViewModel = viewModel(),
     profileViewModel: ProfileViewModel =viewModel(),
     actionButtonOnClick:() -> Unit,
-    fromLogIn:Boolean = false
+    fromLogIn:Boolean = false,
+    navController: NavController = rememberNavController()
 ) {
     val email= if(!fromLogIn) signUpViewModel.loginUIState.value.email else loginViewModel.loginUIState.value.email
     val profiles=profileViewModel.stateList
@@ -91,6 +99,7 @@ fun ProfilePage(
             Log.d("MySelfTag", p.toString())
         }
     }
+    val context = LocalContext.current
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = true,
@@ -105,7 +114,19 @@ fun ProfilePage(
                             1 -> onDashboardClick
                             2 -> onLocateClick
                             3 -> onFilterClick
-                            4 -> onLogOutClick
+                            4 -> {
+                                {
+                                    subscribeRequestParameters.mobile = profile.value.contactNo
+                                    subscriptionOn(navController = navController, popBack = true, context = context)
+                                }
+                            }
+                            5 -> {
+                                {
+                                    unsubscribeRequestParameters.mobile = profile.value.contactNo
+                                    subscriptionOff(navController = navController, popBack = true)
+                                }
+                            }
+                            6 -> onLogOutClick
                             else -> { {} }
                         }
                         PresentDrawerContent(

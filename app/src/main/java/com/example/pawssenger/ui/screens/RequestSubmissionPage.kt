@@ -61,6 +61,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.pawssenger.EntryPageButtons
 import com.example.pawssenger.R
 import com.example.pawssenger.data.NavigationDrawerContent
@@ -89,7 +91,7 @@ fun RequestSubmissionPage(
     onLocateClick:()->Unit,
     onFilterClick:()->Unit,
     selectedItemIndex:Int,
-    actionButtonOnClick:()->Unit
+    actionButtonOnClick:()->Unit,
 ) {
     var uri by remember{
         mutableStateOf<Uri?>(null)
@@ -128,6 +130,8 @@ fun RequestSubmissionPage(
         mutableStateOf("")
     }
 
+    val myContext = LocalContext.current
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = true,
@@ -142,7 +146,7 @@ fun RequestSubmissionPage(
                             1 -> onDashboardClick
                             2 -> onLocateClick
                             3 -> onFilterClick
-                            4 -> onLogOutClick
+                            6 -> onLogOutClick
                             else -> { {} }
                         }
                         PresentDrawerContent(
@@ -359,7 +363,7 @@ fun Upload(uri: Uri, context: Context,petName: String,contactInfo:String, dropOf
             // ...
             Toast.makeText(
                 context,
-                "upload successed",
+                "upload successful, press the home icon",
                 Toast.LENGTH_SHORT
             ).show()
         }
